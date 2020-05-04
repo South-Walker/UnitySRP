@@ -9,6 +9,7 @@ public partial class CameraRenderer
     partial void DrawUnsupportedShaders();
     partial void DrawGizmos();
     partial void PrepareForSceneWindow();
+    partial void PrepaerBuffer();
 #if UNITY_EDITOR
     static ShaderTagId[] legacyShaderTagIds = {
         new ShaderTagId("Always"),
@@ -27,6 +28,7 @@ public partial class CameraRenderer
             context.DrawGizmos(camera, GizmoSubset.PostImageEffects);
         }
     }
+    string SampleName { get; set; }
     partial void DrawUnsupportedShaders()
     {
         if (errorMaterial == null)
@@ -57,5 +59,12 @@ public partial class CameraRenderer
             ScriptableRenderContext.EmitWorldGeometryForSceneView(camera);
         }
     }
+    partial void PrepaerBuffer()
+    {
+        //防止command buffer同名合并
+        buffer.name = SampleName = camera.name;
+    }
+#else
+    const string SampleName = bufferName;
 #endif
 }

@@ -20,6 +20,7 @@ public partial class CameraRenderer
     {
         this.context = context;
         this.camera = camera;
+        PrepaerBuffer();
         PrepareForSceneWindow();
         if (!Cull())
         {
@@ -36,17 +37,24 @@ public partial class CameraRenderer
         //设置摄像机VP矩阵与其他一些性质，
         //在清除之前调用，保证使用到正确的清除方法，而非覆盖的着色器
         context.SetupCameraProperties(camera);
+        //clearFlags:
+        //1:Skybox 2:Color 3:Depth 4:Nothing
+        CameraClearFlags flags = camera.clearFlags;
         //清除之前绘制的内容，目标为帧缓存时不影响，目标为特定渲染纹理时可能导致混合
         //另外这个方法被一个profile性能采样包裹，因此并列的写保证采样器合并
-        buffer.ClearRenderTarget(true, true, Color.clear);
+        buffer.ClearRenderTarget(
+            flags <= CameraClearFlags.Depth,
+            flags == CameraClearFlags.Color,
+            flags == CameraClearFlags.Color?
+                camera.backgroundColor.linear : Color.clear);
         //启动profile性能采样
-        buffer.BeginSample(bufferName);
+        buffer.BeginSample(SampleName);
         ExecuteBuffer();
     }
     void Submit()
     {
         //关闭profile性能采样
-        buffer.EndSample(bufferName);
+        buffer.EndSample(SampleName);
         ExecuteBuffer();
         //draw命令在Submit前只被缓存
         context.Submit();

@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Custom RP\Runtime\CameraRenderer.cs" />
+    <Compile Include="Assets\Custom RP\Runtime\CameraRenderer.Editor.cs" />
+    <Compile Include="Assets\Custom RP\Runtime\CustomRenderPipeline.cs" />
     <Compile Include="Assets\Custom RP\Runtime\CustomRenderPipelineAsset.cs" />
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>C:/Users/lenovo/Desktop/UnitySRP/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
