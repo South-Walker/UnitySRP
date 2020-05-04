@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class CameraRenderer
+public partial class CameraRenderer
 {
+    
     //无光照着色器
     static ShaderTagId unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit");
+
     ScriptableRenderContext context;
     Camera camera;
     const string bufferName = "Render Camera";
@@ -18,12 +20,15 @@ public class CameraRenderer
     {
         this.context = context;
         this.camera = camera;
+        PrepareForSceneWindow();
         if (!Cull())
         {
             return;
         }
         Setup();
         DrawVisibleGeometry();
+        DrawUnsupportedShaders();
+        DrawGizmos();
         Submit();
     }
     void Setup()
