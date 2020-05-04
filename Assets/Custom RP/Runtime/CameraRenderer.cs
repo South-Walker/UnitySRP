@@ -5,6 +5,8 @@ using UnityEngine.Rendering;
 
 public class CameraRenderer
 {
+    //无光照着色器
+    static ShaderTagId unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit");
     ScriptableRenderContext context;
     Camera camera;
     const string bufferName = "Render Camera";
@@ -52,7 +54,26 @@ public class CameraRenderer
     }
     void DrawVisibleGeometry()
     {
+        //opaque => skybox => transparent
+        var sortingSettings = new SortingSettings(camera)
+        {
+            criteria = SortingCriteria.CommonOpaque
+        };
+        var drawingSettings = new DrawingSettings(
+            unlitShaderTagId, sortingSettings
+            );
+        var filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
+        context.DrawRenderers(
+            cullingResults, ref drawingSettings, ref filteringSettings
+            );
         context.DrawSkybox(camera);
+
+        sortingSettings.criteria = SortingCriteria.CommonTransparent;
+        drawingSettings.sortingSettings = sortingSettings;
+        filteringSettings.renderQueueRange = RenderQueueRange.transparent;
+        context.DrawRenderers(
+            cullingResults, ref drawingSettings, ref filteringSettings
+            );
     }
     CullingResults cullingResults;
     bool Cull()
