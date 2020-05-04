@@ -16,6 +16,10 @@ public class CameraRenderer
     {
         this.context = context;
         this.camera = camera;
+        if (!Cull())
+        {
+            return;
+        }
         Setup();
         DrawVisibleGeometry();
         Submit();
@@ -49,5 +53,17 @@ public class CameraRenderer
     void DrawVisibleGeometry()
     {
         context.DrawSkybox(camera);
+    }
+    CullingResults cullingResults;
+    bool Cull()
+    {
+        //在裁剪前先获取裁剪参数
+        if (camera.TryGetCullingParameters(out ScriptableCullingParameters p)) 
+        {
+            //p可能是个很大的结构，写ref防止复制
+            cullingResults = context.Cull(ref p);
+            return true;
+        }
+        return false;
     }
 }
