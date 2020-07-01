@@ -77,6 +77,7 @@
     <None Include="Assets\Custom RP\ShaderLibrary\Lighting.hlsl" />
     <None Include="Assets\Custom RP\Shaders\Lit.shader" />
     <None Include="Assets\Custom RP\ShaderLibrary\Light.hlsl" />
+    <None Include="Assets\Custom RP\ShaderLibrary\BRDF.hlsl" />
     <None Include="Assets\Custom RP\ShaderLibrary\Common.hlsl" />
     <None Include="Assets\Custom RP\ShaderLibrary\Surface.hlsl" />
     <Reference Include="UnityEditor.CacheServer">
